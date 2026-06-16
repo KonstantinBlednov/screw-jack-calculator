@@ -43,19 +43,19 @@ LANG_DICT = {
     "th_f_poor": {"EN": "Poor/Boundary lubrication", "RU": "Недостаточная/Граничная смазка"},
     "th_f_dry": {"EN": "Dry friction (Emergency/Unlubricated)", "RU": "Сухое трение (Аварийный режим/Без смазки)"},
     
-    "m_screw": {"EN": "Screw material", "RU": "Материал винта"},
-    "scr_hard": {"EN": "Steel 45 (Hardened)", "RU": "Сталь 45 (Закалка)"},
-    "scr_norm": {"EN": "Steel 45 (Normalized)", "RU": "Сталь 45 (Нормализация)"},
-    "scr_st3": {"EN": "Steel 3 / St3", "RU": "Сталь 3 / Ст3"},
+    "m_screw": {"EN": "Screw material (ISO / EN)", "RU": "Материал винта (ISO / EN)"},
+    "scr_hard": {"EN": "Steel C45 (Quenched & Tempered)", "RU": "Сталь C45 (Улучшенная/Закаленная)"},
+    "scr_norm": {"EN": "Steel C45 (Normalized)", "RU": "Сталь C45 (Нормализованная)"},
+    "scr_st3": {"EN": "Structural Steel S235JR", "RU": "Конструкционная сталь S235JR (Ст3)"},
     "cap_scr_hard": {"EN": "💡 *High strength, surface hardness. Reduces thread wear and galling risks.*", "RU": "💡 *Высокая прочность, твердость поверхности. Снижает износ резьбы и риск задиров.*"},
     "cap_scr_norm": {"EN": "💡 *Good machinability, medium strength. Classic choice for low-stress screws.*", "RU": "💡 *Хорошая обрабатываемость, средняя прочность. Классический выбор для ненапряженных винтов.*"},
     "cap_scr_st3": {"EN": "💡 *Low strength. Used only for light, low-capacity manual jacks.*", "RU": "💡 *Низкая прочность. Применяется только для легких ручных домкратов малой грузоподъемности.*"},
     
-    "m_nut": {"EN": "Nut material", "RU": "Материал гайки"},
-    "nut_br1": {"EN": "Bronze BrO10F1", "RU": "Бронза БрО10Ф1"},
-    "nut_br2": {"EN": "Bronze BrA9Zh3", "RU": "Бронза БрА9Ж3"},
-    "nut_iron": {"EN": "Antifriction Cast Iron", "RU": "Антифрикционный чугун"},
-    "nut_steel": {"EN": "Steel (St5, Steel 45)", "RU": "Сталь (Ст5, Сталь 45)"},
+    "m_nut": {"EN": "Nut material (ISO / EN)", "RU": "Материал гайки (ISO / EN)"},
+    "nut_br1": {"EN": "Phosphor Bronze CuSn10-P", "RU": "Фосфористая бронза CuSn10-P (БрО10Ф1)"},
+    "nut_br2": {"EN": "Aluminum Bronze CuAl9Fe3-C", "RU": "Алюминиевая бронза CuAl9Fe3-C (БрА9Ж3)"},
+    "nut_iron": {"EN": "Antifriction Cast Iron (GJL)", "RU": "Антифрикционный чугун (GJL)"},
+    "nut_steel": {"EN": "Carbon Steel (C45 / E335)", "RU": "Углеродистая сталь (C45 / E335)"},
     "cap_nut_br1": {"EN": "💡 *Ideal antifriction pair. High allowable pressure, excellent run-in.*", "RU": "💡 *Идеальная антифрикционная пара. Высокое допускаемое давление, отличная прирабатываемость.*"},
     "cap_nut_br2": {"EN": "💡 *High crush strength. Requires good lubrication and run-in.*", "RU": "💡 *Высокая прочность на смятие. Требует хорошей смазки и приработки.*"},
     "cap_nut_iron": {"EN": "💡 *Cost-effective for low speeds. Risk of brittle thread shearing under impact.*", "RU": "💡 *Бюджетный вариант для малых скоростей. Склонность к хрупкому скалыванию витков при ударах.*"},
@@ -111,11 +111,98 @@ LANG_DICT = {
     "help_content": {
         "EN": """
         ### Operating Procedure
-        ... *(текст справки на английском остался прежним)* ...
+        
+        **Step 1. Localization Setup**
+        At the top of the sidebar, select the interface language:
+        * **EN** (English — active by default)
+        * **RU** (Russian)
+        
+        **Step 2. Input Drive Parameters (Lever)**
+        In the *\"1. Drive Parameters (Lever)\"* section, enter:
+        * **Force on lever ($F_{handle}$)** — the force applied by the operator to the handle (100–150 N is recommended for continuous operation, up to 250–300 N for short-term efforts).
+        * **Lever arm length ($R$)** — the rotation radius of the handle.
+        
+        **Step 3. Select Thread Geometry**
+        In the *\"2. Thread Type & Parameters\"* section:
+        * Select the thread profile: Trapezoidal (GOST 9484), Buttress (GOST 10177), or Metric (GOST 24705).
+        * Specify the nominal outer diameter ($d$) and the thread pitch ($P$). The drop-down menus automatically synchronize with standard GOST dimensions.
+        * Enter the **Working stroke ($L$)** — the maximum net linear travel or lifting height (not to be confused with the total structural blank length of the screw).
+        
+        **Step 4. Define Support Friction Conditions**
+        In the *\"3. Screw End Support (Thrust Collar)\"* section:
+        * Select the friction type at the screw tip: thrust ball bearing, lubricated sliding, or dry friction. The program automatically assigns the friction coefficient ($f_p$).
+        * Define the mean bearing diameter ($D_{mean\\_t}$). By default, it is set equal to the nominal screw diameter ($1.0 \\cdot d$), which is correct for most flat thrust collars.
+        
+        **Step 5. Structural Design and Materials**
+        In the *\"4. Friction & Materials\"* section:
+        * Specify the screw and nut materials. Based on your selection, the program adjusts the allowable stress ($\\sigma_{adm}$), allowable thread pressure ($q_{adm}$), and the thread pair friction coefficient ($f$). A brief engineering tooltip will appear below the selection field.
+        * Set the **nut height coefficient ($\\psi_H$)** using the slider (standard engineering range: 1.2–2.5). The nut height is calculated as $H_{nut} = \\psi_H \\cdot d_2$.
+        * Select the structural boundary conditions (support constraints) for the screw. The length factor ($\\mu$) automatically updates according to mechanics of materials rules (ranging from $2.0$ for a cantilever to $0.5$ for a fully fixed-fixed beam setup).
+        
+        ---
+        ### Analyzing the Output Results
+        The calculation results are displayed in the main window and are divided into three core blocks:
+        
+        **1. Performance Output Parameters**
+        * **Developed Axial Force ($F$)** — the net axial force generated by the screw.
+        * **Useful Load Capacity** — the mass of the load (in kg) that the mechanism can lift under the specified handle force.
+        * **Total Mechanism Efficiency ($\\eta_{total}$)** — accounts for friction losses both within the thread assembly and at the thrust collar (end support).
+        
+        **2. Torque Distribution**
+        * This block visually demonstrates how much of the input lever torque is spent on useful work and overcoming thread friction, versus how much is lost to friction at the thrust collar.
+        
+        **3. Verification Reports (Strength & Reliability)**
+        * **Screw Rod Check:** Computes the von Mises equivalent stress (combined compression and torsion). If $\\sigma_{equiv} \\le \\sigma_{adm}$, a green success status is displayed. Additionally, stability is verified via Euler's formula: the buckling safety factor $k_{ust}$ must be at least 3.0.
+        * **Nut Check:** Evaluates the mean contact surface pressure ($q$) on the thread engagement turns. If the calculated pressure exceeds the allowable limit ($q > q_{adm}$), the application triggers a warning regarding the risk of thread crushing.
+        * **Self-Locking Conditions:** Compares the thread lead angle ($\\psi$) with the modified friction angle ($\\phi'$). If $\\psi < \\phi'$, the mechanism is verified as safely self-locking, meaning spontaneous lowering under an axial load is physically impossible.
         """,
         "RU": """
         ### Порядок расчета
-        ... *(текст справки на русском остался прежним)* ...
+        
+        **Шаг 1. Настройка локализации**
+        В верхней части боковой панели выберите язык интерфейса:
+        * **EN** (Английский — активен по умолчанию)
+        * **RU** (Русский)
+        
+        **Шаг 2. Задание параметров привода (Рычаг)**
+        В разделе *\"1. Параметры привода (Рычаг)\"* введите:
+        * **Силу на рычаге ($F_{руч}$)** — усилие, прикладываемое оператором к рукоятке (для длительной работы рекомендуется 100–150 Н, для кратковременной — до 250–300 Н).
+        * **Длина плеча рычага ($R$)** — радиус вращения рукоятки.
+        
+        **Шаг 3. Выбор геометрических параметров резьбы**
+        В разделе *\"2. Выбор типа и параметров резьбы\"*:
+        * Выберите профиль резьбы: Трапецеидальная (ГОСТ 9484), Упорная (ГОСТ 10177) или Метрическая (ГОСТ 24705).
+        * Укажите номинальный наружный диаметр ($d$) и шаг резьбы ($P$). Выпадающие списки автоматически синхронизируются со стандартными сортаментами ГОСТ.
+        * Введите **Рабочий ход винта ($L$)** — максимальную чистую высоту подъема/перемещения (не путать с полной конструктивной длиной заготовки винта).
+        
+        **Шаг 4. Определение условий трения в опорах**
+        В разделе *\"3. Опорный торец винта (Пята)\"*:
+        * Выберите вид трения на торце: подшипник качения, скольжение со смазкой или сухое трение. Программа автоматически назначит коэффициент трения ($f_п$).
+        * Задайте средний диаметр опоры торца ($D_{ср\_т}$). По умолчанию он принят равеным наружному диаметру винта ($1.0 \\cdot d$), что корректно для большинства плоских опор.
+        
+        **Шаг 5. Конструктивное исполнение и материалы**
+        В разделе *\"4. Трение и Материалы винтовой пары\"*:
+        * Выберите состояние смазки в резьбе.
+        * Укажите материалы винта и гайки (по международным стандартам ISO/EN). Программа автоматически скорректирует допускаемое напряжение ($\\sigma_{adm}$), допускаемое давление в резьбе ($q_{adm}$) и рассчитает итоговый коэффициент трения ($f$) с учетом смазки.
+        * Задайте **коэффициент высоты гайки ($\\psi_H$)** с помощью слайдера (стандартный диапазон: 1.2–2.5). Высота гайки рассчитывается как $H_{гайки} = \\psi_H \\cdot d_2$.
+        * Выберите расчетную схему опор винта для проверки на устойчивость (продольный изгиб). Коэффициент приведения длины ($\\mu$) обновится автоматически согласно правилам сопрмута.
+        
+        ---
+        ### Анализ результатов расчета
+        Результаты выводятся в основное окно приложения и разделены на три ключевых блока:
+        
+        **1. Выходные силовые параметры**
+        * **Развиваемое осевое усилие ($F$)** — чистая осевая сила, генерируемая винтом.
+        * **Полезная грузоподъемность** — масса груза (в кг), которую способен поднять механизм при заданном усилии на рычаге.
+        * **Общий КПД механизма ($\\eta_{общ}$)** — учитывает потери на трение как в самой резьбе, так и на опорном торце (пятке).
+        
+        **2. Распределение крутящего момента**
+        * Блок наглядно показывает, какая часть крутящего момента от рычага расходуется на полезную работу и преодоление трения в резьбе, а какая — уходит на преодоление сил трения на опорной пятке винта.
+        
+        **3. Проверочные отчеты (Прочность и Надежность)**
+        * **Проверка стержня винта:** Расчет эквивалентных напряжений по Мизесу (совместное сжатие + кручение). Если $\\sigma_{эквив} \\le \\sigma_{adm}$, выводится зеленый статус. Дополнительно проверяется устойчивость по формуле Эйлера: запас устойчивости $k_{уст}$ должен быть не менее 3.0.
+        * **Проверка гайки:** Оценивается среднее контактное давление ($q$) на витках. Если расчетное давление превышает допускаемое ($q > q_{adm}$), приложение выдаст предупреждение о риске смятия резьбы.
+        * **Условие самоторможения:** Проверяется соотношение угла подъема резьбы ($\\psi$) и приведенного угла трения ($\\phi'$). Если $\\psi < \\phi'$, механизм признается безопасным (самотормозящимся).
         """
     }
 }
@@ -201,13 +288,14 @@ else:
 
 D_sr_t = st.sidebar.number_input(_("d_sr_t"), value=float(d), step=1.0, help=_("d_sr_t_help"))
 
-# --- НОВАЯ СЕКЦИЯ 4: ТРЕНИЕ И МАТЕРИАЛЫ ---
+# --- СЕКЦИЯ 4: ТРЕНИЕ И МАТЕРИАЛЫ ---
 st.sidebar.header(_("h_mat"))
 
-# Выбор условий трения (ВЫНЕСЕНО НАВЕРХ)
+# Выбор условий трения в резьбе
 f_cond_options = [_("th_f_good"), _("th_f_poor"), _("th_f_dry")]
 friction_condition = st.sidebar.selectbox(_("th_f_cond"), f_cond_options)
 
+# Выбор материала винта (ISO/EN)
 scr_options = [_("scr_hard"), _("scr_norm"), _("scr_st3")]
 material_screw = st.sidebar.selectbox(_("m_screw"), scr_options)
 
@@ -223,14 +311,14 @@ else:
 
 st.sidebar.markdown(" ")
 
+# Выбор материала гайки (ISO/EN)
 nut_options = [_("nut_br1"), _("nut_br2"), _("nut_iron"), _("nut_steel")]
 material_nut = st.sidebar.selectbox(_("m_nut"), nut_options)
 
-# --- ДИНАМИЧЕСКАЯ МАТРИЦА РАСЧЕТА КОЭФФИЦИЕНТА ТРЕНИЯ f ---
+# --- ДИНАМИЧЕСКАЯ МАТРИЦА КОЭФФИЦИЕНТА ТРЕНИЯ f ---
 if material_nut == _("nut_br1"):
     st.sidebar.caption(_("cap_nut_br1"))
     q_adm = 12.0
-    # Назначение f в зависимости от смазки
     if friction_condition == _("th_f_good"): f_friction = 0.08
     elif friction_condition == _("th_f_poor"): f_friction = 0.11
     else: f_friction = 0.15
@@ -345,7 +433,7 @@ F_cr = (math.pi**2 * E_modul * I) / (L_priv**2)
 k_ust = F_cr / F if F > 0 else float("inf")
 
 
-# --- ВЫВОД РЕЗУЛЬТАТОВ ---
+# --- ВЫВОД РЕЗУЛЬТАТОВ НА ЭКРАН ---
 profile_short = "Metric" if thread_type_sel == _("t_metr") else ("Trapezoidal" if thread_type_sel == _("t_trap") else "Buttress")
 st.subheader(f"{_('res_header')} {profile_short} {d}х{P}")
 
@@ -357,7 +445,7 @@ c_res3.metric(_("m_eff"), f"{eff_total:.1f} %")
 st.markdown("---")
 st.subheader(_("dist_torque"))
 
-scr_short = "Steel 45" if "45" in material_screw else "Steel 3"
+scr_short = "Steel C45" if "C45" in material_screw else "Steel S235JR"
 st.write(f"{_('text_f')} ({scr_short} {_('text_by_nut')}) $f$ = **{f_friction:.2f}** | {_('text_f_p')} $f_п$ = **{f_p:.2f}**")
 
 cm1, cm2, cm3 = st.columns(3)
